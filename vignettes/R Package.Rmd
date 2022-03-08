@@ -1,0 +1,199 @@
+---
+title: "R Package Vignette"
+author: "Aditi Gopalan"
+date: "07/03/2022"
+output: html_document
+---
+
+```{r set3up, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 1. Setting up a new package
+
+```{r 1, eval=FALSE}
+library(devtools)
+library(roxygen2)
+
+setwd("C:/Users/aditi/Desktop/angsd")
+devtools::create("aditi.package")
+```
+
+```
+√ Creating 'aditi.package/'
+√ Setting active project to 'C:/Users/aditi/Desktop/angsd/aditi.package'
+√ Creating 'R/'
+√ Writing 'DESCRIPTION'
+Package: aditi.package
+Title: What the Package Does (One Line, Title Case)
+Version: 0.0.0.9000
+Authors@R (parsed):
+    * First Last <first.last@example.com> [aut, cre] (YOUR-ORCID-ID)
+Description: What the package does (one paragraph).
+License: `use_mit_license()`, `use_gpl3_license()` or friends to
+    pick a license
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2
+√ Writing 'NAMESPACE'
+√ Writing 'aditi.package.Rproj'
+√ Adding '^AG\\.Package\\.Rproj$' to '.Rbuildignore'
+√ Adding '.Rproj.user' to '.gitignore'
+√ Adding '^\\.Rproj\\.user$' to '.Rbuildignore'
+√ Setting active project to '<no active project>'
+```
+I ran the following to build my package 
+
+```{r 1, eval=FALSE}
+rm(list = ls())
+# # Ctrl + Shift + F10
+devtools::load_all()
+devtools::document()
+devtools::build_vignettes()
+devtools::build()
+```
+## 2. Use the reading in function 
+
+I copied the function into an R script and moved that to my R folder in the package 
+
+## 3. Adapting the DESCRIPTION file
+
+I modified the description file. Dependencies are added automatically 
+
+## 4. Loading and using the function 
+
+On the scu, I ran the following and then scped the file to my local
+```
+scp adg4001@aphrodite.med.cornell.edu:/home/adg4001/hw/fastqc_data.txt C:\Users\aditi\Desktop\angsd\aditi.package\data
+
+adg4001@aphrodite.med.cornell.edu's password:
+fastqc_data.txt                                                                       100%   13KB   2.5MB/s   00:00
+```
+
+```{r 4, eval=FALSE}
+library(magrittr) 
+library(dplyr)
+library(aditi.package)
+
+source("C:/Users/aditi/Desktop/angsd/aditi.package/R/reading_in.R")
+aditi.package::reading_in("C:/Users/aditi/Desktop/angsd/aditi.package/data/fastqc_data.txt")
+```
+```
+ #Base     Mean Median Lower Quartile Upper Quartile 10th Percentile 90th Percentile
+1      1 39.85109     40             40             40              40              40
+2      2 39.82322     40             40             40              40              40
+3      3 39.80665     40             40             40              40              40
+4      4 39.79661     40             40             40              40              40
+5      5 39.48241     40             40             40              40              40
+6      6 39.68721     40             40             40              40              40
+7      7 39.61447     40             40             40              40              40
+8      8 39.53904     40             40             40              40              40
+9      9 39.40539     40             40             40              40              40
+10    10 39.22728     40             40             40              40              40
+11    11 39.03652     40             40             40              40              40
+12    12 38.83685     40             40             40              40              40
+13    13 38.00679     40             40             40              40              40
+14    14 37.42061     40             40             40              32              40
+15    15 37.22028     40             40             40              29              40
+16    16 36.47826     40             40             40              22              40
+17    17 35.04345     40             40             40              13              40
+18    18 35.44634     40             40             40              16              40
+19    19 34.87004     40             40             40              14              40
+20    20 34.15579     40             38             40              11              40
+21    21 33.22713     40             31             40              10              40
+22    22 32.49217     40             27             40               9              40
+23    23 31.41096     40             22             40               7              40
+24    24 30.57500     40             20             40               6              40
+25    25 29.42926     40             16             40               5              40
+26    26 28.15252     40             14             40               5              40
+27    27 26.80315     35             11             40               4              40
+28    28 25.57454     30             10             40               4              40
+29    29 24.97025     28             10             40               4              40
+```
+## 5 
+
+SED command in UNIX stands for stream editor and it can perform lots of functions on file like searching, find and replace, insertion or deletion. `sed` with the `-n` prints only replaced lines.
+
+```
+source: https://www.geeksforgeeks.org/sed-command-in-linux-unix-with-examples/
+```
+
+## 6 
+
+This takes sample name as input and adds it to the Sample_Name column in the df 
+
+```{r 6, eval=FALSE}
+dat$Sample_Name <- s_name
+```
+```
+#Base     Mean Median Lower Quartile Upper Quartile 10th Percentile 90th Percentile
+1      1 39.85109     40             40             40              40              40
+2      2 39.82322     40             40             40              40              40
+3      3 39.80665     40             40             40              40              40
+4      4 39.79661     40             40             40              40              40
+5      5 39.48241     40             40             40              40              40
+6      6 39.68721     40             40             40              40              40
+7      7 39.61447     40             40             40              40              40
+8      8 39.53904     40             40             40              40              40
+9      9 39.40539     40             40             40              40              40
+10    10 39.22728     40             40             40              40              40
+11    11 39.03652     40             40             40              40              40
+12    12 38.83685     40             40             40              40              40
+13    13 38.00679     40             40             40              40              40
+14    14 37.42061     40             40             40              32              40
+15    15 37.22028     40             40             40              29              40
+16    16 36.47826     40             40             40              22              40
+17    17 35.04345     40             40             40              13              40
+18    18 35.44634     40             40             40              16              40
+19    19 34.87004     40             40             40              14              40
+20    20 34.15579     40             38             40              11              40
+21    21 33.22713     40             31             40              10              40
+22    22 32.49217     40             27             40               9              40
+23    23 31.41096     40             22             40               7              40
+24    24 30.57500     40             20             40               6              40
+25    25 29.42926     40             16             40               5              40
+26    26 28.15252     40             14             40               5              40
+27    27 26.80315     35             11             40               4              40
+28    28 25.57454     30             10             40               4              40
+29    29 24.97025     28             10             40               4              40
+   Sample_Name
+1         wt_1
+2         wt_1
+3         wt_1
+4         wt_1
+5         wt_1
+6         wt_1
+7         wt_1
+8         wt_1
+9         wt_1
+10        wt_1
+11        wt_1
+12        wt_1
+13        wt_1
+14        wt_1
+15        wt_1
+16        wt_1
+17        wt_1
+18        wt_1
+19        wt_1
+20        wt_1
+21        wt_1
+22        wt_1
+23        wt_1
+24        wt_1
+25        wt_1
+26        wt_1
+27        wt_1
+28        wt_1
+29        wt_1
+```
+## 7 
+
+Okay. From the reps I used for the previous assignments (I had already run fastqc), I wrote the following loop to put all the text files in one folder. 
+
+```{bash 7a, eval=FALSE}
+for i in ERR458493 ERR458494;
+do
+cp ./WT_1_${i}_fastqc/fastqc_data.txt /athena/angsd/scracth/adg4001/data_package/WT_1_${i}_data.txt
+done
+```

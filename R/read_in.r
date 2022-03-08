@@ -1,4 +1,4 @@
-reading_in_alt <- function(file, test="Per base sequence quality") {
+reading_in_alt <- function(file, test="Per base sequence quality", s_name) {
   ## open connection
   con <- base::file(file, 'r')
 
@@ -17,6 +17,7 @@ reading_in_alt <- function(file, test="Per base sequence quality") {
   close(con)
 
   ## parse
-  dat <- as.data.frame(fread(paste(input, collapse="\n")))
+  dat <- as.data.frame(data.table::fread(paste(input, collapse="\n")))
+  dat$Sample_Name <- s_name
   return(dat)
 }
