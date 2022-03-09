@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## 1. Setting up a new package
 
-```{r 1, eval=FALSE}
+```{r 1.1, eval=FALSE}
 library(devtools)
 library(roxygen2)
 
@@ -45,7 +45,6 @@ RoxygenNote: 7.1.2
 I ran the following to build my package 
 
 ```{r 1, eval=FALSE}
-rm(list = ls())
 # # Ctrl + Shift + F10
 devtools::load_all()
 devtools::document()
@@ -76,7 +75,7 @@ library(dplyr)
 library(aditi.package)
 
 source("C:/Users/aditi/Desktop/angsd/aditi.package/R/reading_in.R")
-aditi.package::reading_in("C:/Users/aditi/Desktop/angsd/aditi.package/data/fastqc_data.txt")
+aditi.package::reading_in_alt("C:/Users/aditi/Desktop/angsd/aditi.package/data/fastqc_data.txt")
 ```
 ```
  #Base     Mean Median Lower Quartile Upper Quartile 10th Percentile 90th Percentile
@@ -191,9 +190,109 @@ dat$Sample_Name <- s_name
 
 Okay. From the reps I used for the previous assignments (I had already run fastqc), I wrote the following loop to put all the text files in one folder. 
 
-```{bash 7a, eval=FALSE}
+```{bash 7.1, eval=FALSE}
 for i in ERR458493 ERR458494;
 do
-cp ./WT_1_${i}_fastqc/fastqc_data.txt /athena/angsd/scracth/adg4001/data_package/WT_1_${i}_data.txt
+cp /home/adg4001/alignments_bwa_star/reps/WT_1/WT_1_${i}_fastqc/fastqc_data.txt /athena/angsd/scratch/adg4001/data_package/WT_1_${i}_data.txt
 done
 ```
+
+I ran this in the WT_2 folder as well: 
+
+```{bash 7.2, eval=FALSE}
+for i in ERR458878 ERR458879;
+do
+cp /home/adg4001/alignments_bwa_star/reps/WT_2/WT_2_${i}_fastqc/fastqc_data.txt /athena/angsd/scratch/adg4001/data_package/WT_2_${i}_data.txt
+done
+```
+
+I scped the files into my data folder of the package 
+
+```
+C:\Users\aditi>scp adg4001@aphrodite.med.cornell.edu:/athena/angsd/scratch/adg4001/data_package/* C:\Users\aditi\Desktop\angsd\aditi.package\data
+adg4001@aphrodite.med.cornell.edu's password:
+WT_1_ERR458493_data.txt                                                               100%  134KB   2.8MB/s   00:00
+WT_1_ERR458494_data.txt                                                               100%  136KB   3.7MB/s   00:00
+WT_2_ERR458878_data.txt                                                               100%  135KB   3.8MB/s   00:00
+WT_2_ERR458879_data.txt
+```
+
+```{r 7.3, eval=FALSE}
+dir <- "C:/Users/aditi/Desktop/angsd/aditi.package/data"
+pat <- "*.txt"
+#get a list of all files with ndvi in the name in your directory
+dir 
+pat 
+files <- list.files(path=dir, pattern=pat, full.names = TRUE)
+files
+dat_1 = list()
+for(file in files){
+  nam = gsub("C:/Users/aditi/Desktop/angsd/aditi.package/data/", "", file)
+  nam1 = gsub("_data.txt", "", nam)
+  dat_1[[file]] <- aditi.package::reading_in_alt(file, s_name = nam1)
+}
+dat_1[[1]] <-NULL
+dat_1
+
+```
+## 8 
+
+`source: https://www.statmethods.net/management/merging.html`
+
+```{r 8, eval=FALSE}
+combined_df <- data.frame()
+for(i in 1:length(dat_1)){
+  combined_df <- rbind(combined_df, dat_1[[i]])
+}
+save(combined_df, file="C:/Users/aditi/Desktop/angsd/aditi.package/data/combined_df.rda")
+```
+## 9
+
+The data directory seemed like the right spot to keep my .rda file.
+
+Documentation is in `R > data.R` 
+
+## 10 
+
+As mentioned above, I did this to build my package: 
+
+```{r 10, eval=FALSE}
+devtools::load_all()
+devtools::document()
+devtools::build_vignettes()
+devtools::build()
+```
+
+## 11
+
+```{r 11}
+library(ggplot2)
+library(gridExtra)
+library(stringr)
+load("C:/Users/aditi/Desktop/angsd/aditi.package/data/combined_df.rda")
+
+wt_1 = combined_df[grep("WT_1", combined_df$Sample_Name),]
+wt_2 = combined_df[grep("WT_2", combined_df$Sample_Name),]
+
+
+W_1 <- ggplot(wt_1, aes(`#Base`, Mean, colour=Sample_Name)) + geom_point()  + theme(legend.position="bottom")
+W_2 <- ggplot(wt_2, aes(`#Base`, Mean, colour=Sample_Name)) + geom_point() + theme(legend.position="bottom")
+
+W_2 <- W_2 + scale_fill_manual(values = c("#00AFBB", "#E7B800"))
+
+final = grid.arrange(W_1, W_2, ncol = 2)
+
+final
+
+ggsave(final, device = "png", path = "C:/Users/aditi/Desktop/angsd/aditi.package/data")
+```
+
+
+And FINALLY, to install the package: 
+
+```{r 11.1, eval=FALSE}
+devtools::install_github("aditigopalan/aditi.package")
+```
+
+
+
