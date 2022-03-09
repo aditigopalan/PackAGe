@@ -291,7 +291,7 @@ ggsave(final, device = "png", path = "C:/Users/aditi/Desktop/angsd/aditi.package
 And FINALLY, to install the package: 
 
 ```{r 11.1, eval=FALSE}
-devtools::install_github("aditigopalan/aditi.package")
+devtools::install_github("aditigopalan/package")
 ```
 
 
